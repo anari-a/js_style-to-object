@@ -6,25 +6,24 @@
  * @return {object}
  */
 function convertToObject(sourceString) {
-  const result = {};
+  let final = {};
   const trimmed = sourceString.trim();
   const parts = trimmed.split(';');
-  const items = parts.map((s) => s.trim()).filter((s) => s.length > 0);
+  const items1 = parts.map((s) => s.trim());
+  const items = items1.filter((s) => s.length > 0);
 
-  for (const item of items) {
+  final = items.reduce((acc, item) => {
     const [key, ...rest] = item.split(':');
 
     if (!rest.length) {
-      continue;
+      return acc;
     }
+    acc[key.trim()] = rest.join(':').trim();
 
-    const value = rest.join(':').trim();
-    const k = key.trim();
+    return acc;
+  }, {});
 
-    result[k] = value;
-  }
-
-  return result;
+  return final;
 }
 
 module.exports = convertToObject;
